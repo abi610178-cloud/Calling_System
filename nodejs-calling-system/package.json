@@ -1,0 +1,17 @@
+{
+  "name": "automatic-calling-system",
+  "version": "1.0.0",
+  "description": "Complete automatic calling system with round-based logic",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["calling", "automation", "nodejs", "async"],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0"
+  }
+}
