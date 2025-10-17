@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  body {
+    overscroll-behavior: contain;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer utilities {
+  .touch-action-none {
+    touch-action: none;
+  }
+
+  .touch-action-pan-x {
+    touch-action: pan-x;
+  }
+
+  .touch-action-pan-y {
+    touch-action: pan-y;
+  }
+
+  .safe-area-inset {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  .mobile-card {
+    @apply rounded-lg shadow-md p-4 bg-white;
+  }
+
+  .mobile-input {
+    @apply w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    touch-action: manipulation;
+  }
+
+  .mobile-button {
+    @apply px-4 py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95 min-h-[44px];
+    touch-action: manipulation;
+  }
+
+  .mobile-button-primary {
+    @apply mobile-button bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800;
+  }
+
+  .mobile-button-secondary {
+    @apply mobile-button bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400;
+  }
+}

@@ -137,26 +137,26 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
   };
 
   return (
-    <div className={`rounded-xl p-6 border-2 transition-all duration-500 ${getStatusColor()} ${
-      isCurrentlyCalling ? 'ring-4 ring-blue-400 scale-105 shadow-xl' : 'shadow-md'
+    <div className={`rounded-lg sm:rounded-xl p-4 sm:p-6 border-2 transition-all duration-300 ${getStatusColor()} ${
+      isCurrentlyCalling ? 'ring-2 sm:ring-4 ring-blue-400 scale-105 shadow-xl' : 'shadow-md'
     } ${isCurrentEmployee && isAutoCallActive ? 'ring-2 ring-yellow-400' : ''}`}>
       
       {/* Header with employee info and status */}
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="bg-white p-2 rounded-full shadow-sm">
-            <User className="w-6 h-6 text-gray-600" />
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3 sm:mb-4">
+        <div className="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto">
+          <div className="bg-white p-1.5 sm:p-2 rounded-full shadow-sm flex-shrink-0">
+            <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600" />
           </div>
-          <div>
-            <h3 className="font-bold text-lg">{employee.name}</h3>
-            <p className="text-sm opacity-75">Client</p>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-base sm:text-lg truncate">{employee.name}</h3>
+            <p className="text-xs sm:text-sm opacity-75">Client</p>
               {employee.isUrgent && (
                 <AlertTriangle className="w-5 h-5 text-red-500" title="Urgent Client" />
               )}
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
           {employee.workStatus && (
             <span className={`px-2 py-1 rounded-full text-xs font-medium shadow-sm ${getWorkStatusColor()}`}>
               {getWorkStatusText()}
@@ -189,28 +189,28 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
       </div>
 
       {/* Contact details */}
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center space-x-2 text-sm">
-          <Phone className="w-4 h-4" />
+      <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4">
+        <div className="flex items-center space-x-2 text-xs sm:text-sm">
+          <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           <span className="font-medium">{employee.phoneNumber}</span>
         </div>
         {employee.whatsappNumber && (
-          <div className="flex items-center space-x-2 text-sm">
-            <MessageCircle className="w-4 h-4 text-green-600" />
+          <div className="flex items-center space-x-2 text-xs sm:text-sm">
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
             <span className="font-medium text-green-600">{employee.whatsappNumber}</span>
           </div>
         )}
       </div>
 
       {/* Action Buttons Row */}
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mb-3 sm:mb-4">
         {(employee.whatsappNumber || employee.phoneNumber) && (
           <button
             onClick={handleWhatsAppClick}
-            className="bg-green-500 hover:bg-green-600 text-white py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1"
+            className="mobile-button bg-green-500 hover:bg-green-600 active:bg-green-700 text-white py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1"
             title="Open WhatsApp"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>WhatsApp</span>
           </button>
         )}
@@ -218,10 +218,10 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
         {onViewHistory && (
           <button
             onClick={() => onViewHistory(employee.id)}
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1"
+            className="mobile-button bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1"
             title="View Work History"
           >
-            <History className="w-4 h-4" />
+            <History className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>History</span>
           </button>
         )}
@@ -229,23 +229,23 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
         {onScheduleAppointment && (
           <button
             onClick={() => onScheduleAppointment(employee.id)}
-            className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1"
+            className="mobile-button bg-purple-500 hover:bg-purple-600 active:bg-purple-700 text-white py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1"
             title="Schedule Appointment"
           >
-            <Calendar className="w-4 h-4" />
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Schedule</span>
           </button>
         )}
       </div>
       
       {/* Priority Buttons */}
-      <div className="mb-4">
-        <p className="text-sm font-medium text-gray-700 mb-2">Set Priority:</p>
-        <div className="grid grid-cols-3 gap-2">
+      <div className="mb-3 sm:mb-4">
+        <p className="text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Set Priority:</p>
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => onUpdatePriority(employee.id, 'high')}
             disabled={isAutoCallActive}
-            className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1 ${
+            className={`mobile-button py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1 ${
               employee.priority === 'high' 
                 ? 'bg-green-800 text-white ring-2 ring-green-600' 
                 : 'bg-green-800 hover:bg-green-900 text-white opacity-70 hover:opacity-100'
@@ -258,7 +258,7 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
           <button
             onClick={() => onUpdatePriority(employee.id, 'follow-up')}
             disabled={isAutoCallActive}
-            className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1 ${
+            className={`mobile-button py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1 ${
               employee.priority === 'follow-up' 
                 ? 'bg-green-400 text-white ring-2 ring-green-300' 
                 : 'bg-green-400 hover:bg-green-500 text-white opacity-70 hover:opacity-100'
@@ -271,7 +271,7 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
           <button
             onClick={() => onUpdatePriority(employee.id, 'not-interested')}
             disabled={isAutoCallActive}
-            className={`py-2 px-3 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center space-x-1 ${
+            className={`mobile-button py-2 sm:py-2.5 px-2 sm:px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1 ${
               employee.priority === 'not-interested' 
                 ? 'bg-red-500 text-white ring-2 ring-red-400' 
                 : 'bg-red-500 hover:bg-red-600 text-white opacity-70 hover:opacity-100'
@@ -287,7 +287,7 @@ export const EmployeeCard: React.FC<EmployeeCardProps> = ({
       <button
         onClick={handleQuickCall}
         disabled={isCurrentlyCalling || (isAutoCallActive && !isCurrentEmployee)}
-        className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${getButtonColor()} ${
+        className={`w-full mobile-button py-3 sm:py-3.5 px-4 rounded-lg font-semibold flex items-center justify-center space-x-2 ${getButtonColor()} ${
           isCurrentlyCalling ? 'transform scale-105' : ''
         } disabled:opacity-50 disabled:cursor-not-allowed shadow-md`}
       >

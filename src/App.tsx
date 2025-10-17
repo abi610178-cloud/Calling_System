@@ -360,24 +360,24 @@ function App() {
   return (
     <AuthWrapper>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-slate-50">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-4 mb-4">
-            <div className="bg-blue-600 p-4 rounded-full shadow-lg">
-              <PhoneCall className="w-10 h-10 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+            <div className="bg-blue-600 p-3 sm:p-4 rounded-full shadow-lg">
+              <PhoneCall className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-gray-800">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
                 Client Calling System
               </h1>
-              <div className="flex items-center justify-center space-x-2 mt-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
-                <span className="text-lg text-gray-600">Automated & Manual Calling</span>
+              <div className="flex items-center justify-center space-x-2 mt-1 sm:mt-2">
+                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
+                <span className="text-sm sm:text-base lg:text-lg text-gray-600">Automated & Manual Calling</span>
               </div>
             </div>
           </div>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
             Streamline client communication with automatic calling sequences, real-time status tracking, 
             priority management, and continuous loop functionality until all clients are contacted.
           </p>
@@ -419,26 +419,26 @@ function App() {
         />
 
         {/* Client Portal Toggle */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-green-100 p-2 rounded-full">
-                <Users className="w-6 h-6 text-green-600" />
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="bg-green-100 p-2 rounded-full flex-shrink-0">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Client Self-Service</h2>
-                <p className="text-gray-600">Allow clients to categorize their calling purpose</p>
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">Client Self-Service</h2>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Allow clients to categorize calling purpose</p>
               </div>
             </div>
             <button
               onClick={() => setShowClientPortal(!showClientPortal)}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg ${
+              className={`w-full sm:w-auto mobile-button px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-200 shadow-md whitespace-nowrap text-sm sm:text-base ${
                 showClientPortal
-                  ? 'bg-red-500 hover:bg-red-600 text-white'
-                  : 'bg-green-500 hover:bg-green-600 text-white'
+                  ? 'bg-red-500 hover:bg-red-600 active:bg-red-700 text-white'
+                  : 'bg-green-500 hover:bg-green-600 active:bg-green-700 text-white'
               }`}
             >
-              {showClientPortal ? 'Hide Client Portal' : 'Show Client Portal'}
+              {showClientPortal ? 'Hide Portal' : 'Show Portal'}
             </button>
           </div>
         </div>
@@ -475,12 +475,14 @@ function App() {
         />
 
         {/* Client List */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
-            <Users className="w-7 h-7 text-blue-600" />
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <div className="flex items-center space-x-2">
+            <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
             <span>Client Directory</span>
+            </div>
             {isAutoCallActive && (
-              <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full animate-pulse">
+              <span className="text-xs sm:text-sm bg-blue-100 text-blue-800 px-2 sm:px-3 py-1 rounded-full animate-pulse">
                 Auto Calling Active - Answered Clients Hidden
               </span>
             )}
@@ -493,7 +495,7 @@ function App() {
               : employees;
 
             return visibleEmployees.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {visibleEmployees.map((employee, index) => (
                   <EmployeeCard
                     key={employee.id}
@@ -532,12 +534,12 @@ function App() {
         </div>
 
         {/* Instructions */}
-        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center space-x-2">
+        <div className="mt-6 sm:mt-8 bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center space-x-2">
             <PhoneCall className="w-6 h-6 text-blue-600" />
             <span>How to Use the System</span>
           </h3>
-          <div className="grid md:grid-cols-3 gap-6 text-gray-600">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 text-gray-600">
             <div className="space-y-3">
               <h4 className="font-semibold text-gray-800 flex items-center space-x-2">
                 <Zap className="w-5 h-5 text-yellow-500" />
