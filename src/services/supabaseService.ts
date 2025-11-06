@@ -293,6 +293,9 @@ export class SupabaseService {
       completionDate: work.completion_date ? new Date(work.completion_date) : undefined,
       status: work.status,
       amount: work.amount || undefined,
+      verificationStatus: work.verification_status || undefined,
+      verificationNotes: work.verification_notes || undefined,
+      verifiedAt: work.verified_at ? new Date(work.verified_at) : undefined,
     }));
   }
 
@@ -312,6 +315,8 @@ export class SupabaseService {
         completion_date: workData.completionDate?.toISOString() || null,
         status: workData.status,
         amount: workData.amount || null,
+        verification_status: workData.verificationStatus || null,
+        verification_notes: workData.verificationNotes || null,
       })
       .select()
       .single();
@@ -329,6 +334,9 @@ export class SupabaseService {
       completionDate: data.completion_date ? new Date(data.completion_date) : undefined,
       status: data.status,
       amount: data.amount || undefined,
+      verificationStatus: data.verification_status || undefined,
+      verificationNotes: data.verification_notes || undefined,
+      verifiedAt: data.verified_at ? new Date(data.verified_at) : undefined,
     };
   }
 
@@ -506,5 +514,34 @@ export class SupabaseService {
       feedbackText: data.feedback_text || undefined,
       feedbackDate: new Date(data.feedback_date),
     };
+  }
+
+  async verifyWork(workId: string, status: 'verified' | 'has_complaint', notes?: string): Promise<void> {
+    const user = await auth.getCurrentUser();
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+
+    const updateData: any = {
+      verification_status: status,
+      verified_at: new Date().toISOString(),
+    };
+
+    if (notes) {
+      updateData.verification_notes = notes;
+    }
+
+    if (status === 'verified') {
+      updateData.status = 'completed';
+    }
+
+    const { error } = await supabase
+      .from('work_history')
+      .update(updateData)
+      .eq('id', workId);
+
+    if (error) {
+      throw new Error(`Failed to verify work: ${error.message}`);
+    }
   }
 }

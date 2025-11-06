@@ -53,8 +53,11 @@ export interface WorkHistory {
   workDescription?: string;
   startDate?: Date;
   completionDate?: Date;
-  status: 'completed' | 'in_progress' | 'cancelled';
+  status: 'completed' | 'in_progress' | 'cancelled' | 'pending_verification';
   amount?: number;
+  verificationStatus?: 'pending' | 'verified' | 'has_complaint';
+  verificationNotes?: string;
+  verifiedAt?: Date;
 }
 
 export interface ClientNote {

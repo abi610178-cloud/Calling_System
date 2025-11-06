@@ -95,6 +95,7 @@ function App() {
     addWorkHistory,
     addAppointment,
     addFeedback,
+    verifyWork,
     getClientHistory,
   } = useCallSystem();
 
@@ -793,6 +794,7 @@ function App() {
             onAddWorkHistory={addWorkHistory}
             onAddAppointment={addAppointment}
             onAddFeedback={addFeedback}
+            onVerifyWork={verifyWork}
             workHistory={clientHistory.workHistory}
             appointments={clientHistory.appointments}
             feedback={clientHistory.feedback}

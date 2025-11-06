@@ -560,6 +560,15 @@ export const useCallSystem = () => {
     }
   };
 
+  const verifyWork = async (workId: string, status: 'verified' | 'has_complaint', notes?: string): Promise<void> => {
+    try {
+      await supabaseService.verifyWork(workId, status, notes);
+    } catch (error) {
+      console.error('Failed to verify work:', error);
+      throw error;
+    }
+  };
+
   const getClientHistory = async (clientId: string) => {
     try {
       const [workHistory, appointments, feedback] = await Promise.all([
@@ -595,6 +604,7 @@ export const useCallSystem = () => {
     addWorkHistory,
     addAppointment,
     addFeedback,
+    verifyWork,
     getClientHistory,
   };
 };

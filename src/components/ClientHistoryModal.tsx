@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, History, Star, Calendar, MessageSquare, Plus, Trash2, Edit } from 'lucide-react';
+import { X, History, Star, Calendar, MessageSquare, Plus, Trash2, Edit, CheckCircle, AlertTriangle, Phone } from 'lucide-react';
 import { Employee, WorkHistory, Appointment, ClientFeedback } from '../types/Employee';
+import { WorkVerificationModal } from './WorkVerificationModal';
 
 interface ClientHistoryModalProps {
   client: Employee;
@@ -8,6 +9,7 @@ interface ClientHistoryModalProps {
   onAddWorkHistory: (clientId: string, workData: Omit<WorkHistory, 'id' | 'clientId'>) => Promise<void>;
   onAddAppointment: (clientId: string, appointmentData: Omit<Appointment, 'id' | 'clientId'>) => Promise<void>;
   onAddFeedback: (clientId: string, feedbackData: Omit<ClientFeedback, 'id' | 'clientId'>) => Promise<void>;
+  onVerifyWork?: (workId: string, status: 'verified' | 'has_complaint', notes?: string) => Promise<void>;
   workHistory: WorkHistory[];
   appointments: Appointment[];
   feedback: ClientFeedback[];
@@ -19,12 +21,14 @@ export const ClientHistoryModal: React.FC<ClientHistoryModalProps> = ({
   onAddWorkHistory,
   onAddAppointment,
   onAddFeedback,
+  onVerifyWork,
   workHistory,
   appointments,
   feedback,
 }) => {
   const [activeTab, setActiveTab] = useState<'history' | 'appointments' | 'feedback'>('history');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [verifyingWork, setVerifyingWork] = useState<WorkHistory | null>(null);
   const [formData, setFormData] = useState({
     workType: '',
     workDescription: '',
@@ -43,7 +47,8 @@ export const ClientHistoryModal: React.FC<ClientHistoryModalProps> = ({
       workType: formData.workType,
       workDescription: formData.workDescription || undefined,
       amount: formData.amount ? parseFloat(formData.amount) : undefined,
-      status: 'completed',
+      status: 'pending_verification',
+      verificationStatus: 'pending',
       completionDate: new Date(),
     });
     
@@ -270,7 +275,7 @@ export const ClientHistoryModal: React.FC<ClientHistoryModalProps> = ({
                 workHistory.map((work) => (
                   <div key={work.id} className="p-4 border rounded-lg bg-white">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="flex-1">
                         <h4 className="font-semibold text-gray-800">{work.workType}</h4>
                         {work.workDescription && (
                           <p className="text-gray-600 text-sm mt-1">{work.workDescription}</p>
@@ -283,14 +288,51 @@ export const ClientHistoryModal: React.FC<ClientHistoryModalProps> = ({
                             <span className="font-medium text-green-600">${work.amount}</span>
                           )}
                         </div>
+                        {work.verificationStatus && (
+                          <div className="mt-2 flex items-center space-x-2">
+                            {work.verificationStatus === 'verified' && (
+                              <span className="flex items-center space-x-1 text-xs text-green-600">
+                                <CheckCircle className="w-3 h-3" />
+                                <span>Verified by client</span>
+                              </span>
+                            )}
+                            {work.verificationStatus === 'has_complaint' && (
+                              <span className="flex items-center space-x-1 text-xs text-orange-600">
+                                <AlertTriangle className="w-3 h-3" />
+                                <span>Has complaint - needs attention</span>
+                              </span>
+                            )}
+                            {work.verificationStatus === 'pending' && (
+                              <span className="flex items-center space-x-1 text-xs text-blue-600">
+                                <Phone className="w-3 h-3" />
+                                <span>Awaiting client verification</span>
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {work.verificationNotes && (
+                          <p className="text-xs text-gray-600 mt-1 italic">Note: {work.verificationNotes}</p>
+                        )}
                       </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        work.status === 'completed' ? 'bg-green-100 text-green-800' :
-                        work.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {work.status}
-                      </span>
+                      <div className="flex flex-col items-end space-y-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          work.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          work.status === 'pending_verification' ? 'bg-yellow-100 text-yellow-800' :
+                          work.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {work.status === 'pending_verification' ? 'pending verification' : work.status}
+                        </span>
+                        {work.verificationStatus === 'pending' && onVerifyWork && (
+                          <button
+                            onClick={() => setVerifyingWork(work)}
+                            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg transition-colors flex items-center space-x-1"
+                          >
+                            <Phone className="w-3 h-3" />
+                            <span>Verify</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))
@@ -357,6 +399,15 @@ export const ClientHistoryModal: React.FC<ClientHistoryModalProps> = ({
           )}
         </div>
       </div>
+
+      {verifyingWork && onVerifyWork && (
+        <WorkVerificationModal
+          work={verifyingWork}
+          client={client}
+          onVerify={onVerifyWork}
+          onClose={() => setVerifyingWork(null)}
+        />
+      )}
     </div>
   );
 };
