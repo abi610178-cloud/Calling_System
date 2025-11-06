@@ -611,8 +611,10 @@ function App() {
               <div className="bg-white rounded-lg p-4">
                 <BusinessManager
                   businesses={businesses}
+                  onAddBusiness={handleAddBusiness}
+                  onUpdateBusiness={handleUpdateBusiness}
+                  onDeleteBusiness={handleDeleteBusiness}
                   onClose={() => setActiveSection('system-controls')}
-                  onBusinessesUpdate={setBusinesses}
                 />
               </div>
             </div>
