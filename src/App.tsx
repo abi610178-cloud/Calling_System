@@ -120,10 +120,8 @@ function App() {
     appointments: Appointment[];
     feedback: ClientFeedback[];
   }>({ workHistory: [], appointments: [], feedback: [] });
+  const [activeSection, setActiveSection] = useState<'client-service' | 'contact-management' | 'call-status' | 'system-controls' | 'business-manager' | 'client-directory'>('client-service');
   const [showClientPortal, setShowClientPortal] = useState(false);
-  const [showContactManagement, setShowContactManagement] = useState(false);
-  const [showCallingSystem, setShowCallingSystem] = useState(true);
-  const [showBusinessManager, setShowBusinessManager] = useState(false);
   const [businesses, setBusinesses] = useState<Array<{ id: string; name: string; value: string; isDefault: boolean }>>([]);
 
   // Load marked dates from localStorage on mount
@@ -380,119 +378,166 @@ function App() {
             </div>
           </div>
           <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Streamline client communication with automatic calling sequences, real-time status tracking, 
+            Streamline client communication with automatic calling sequences, real-time status tracking,
             priority management, and continuous loop functionality until all clients are contacted.
           </p>
         </div>
 
-        {/* Navigation Section 1: Client Self-Service */}
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-green-700">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="bg-white p-2 rounded-full flex-shrink-0">
-                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
-              </div>
-              <div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Self-Service Portal</h2>
-                <p className="text-xs sm:text-sm text-green-50">Allow clients to categorize calling purpose and request callbacks</p>
-              </div>
-            </div>
+        {/* Navigation Menu */}
+        <div className="bg-white rounded-xl shadow-lg mb-6 sm:mb-8 p-3 sm:p-4 border-2 border-gray-200">
+          <div className="flex flex-wrap gap-2 justify-center">
             <button
-              onClick={() => setShowClientPortal(!showClientPortal)}
-              className={`w-full sm:w-auto mobile-button px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg font-bold transition-all duration-200 shadow-xl whitespace-nowrap text-sm sm:text-base ${
-                showClientPortal
-                  ? 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
-                  : 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
+              onClick={() => setActiveSection('client-service')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'client-service'
+                  ? 'bg-green-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {showClientPortal ? 'Hide Portal ↑' : 'Show Portal ↓'}
+              Client Self-Service
+            </button>
+            <button
+              onClick={() => setActiveSection('contact-management')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'contact-management'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Contact Management
+            </button>
+            <button
+              onClick={() => setActiveSection('call-status')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'call-status'
+                  ? 'bg-slate-700 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Call Status
+            </button>
+            <button
+              onClick={() => setActiveSection('system-controls')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'system-controls'
+                  ? 'bg-slate-700 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              System Controls
+            </button>
+            <button
+              onClick={() => setActiveSection('business-manager')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'business-manager'
+                  ? 'bg-orange-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Business Manager
+            </button>
+            <button
+              onClick={() => setActiveSection('client-directory')}
+              className={`px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                activeSection === 'client-directory'
+                  ? 'bg-cyan-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Client Directory
             </button>
           </div>
-
-          {/* Client Portal Content */}
-          {showClientPortal && (
-            <div className="mt-6 bg-white rounded-lg p-4">
-              <ClientPurposeSelector
-                businessPhone="+1 (555) 123-4567"
-                businessName="Your Business"
-                onClientPurposeSelected={(name, phone, purpose) => {
-                  addCallRequest(name, phone, purpose);
-                }}
-              />
-            </div>
-          )}
         </div>
 
-        {/* Client Call Request Manager */}
-        <ClientCallRequestManager
-          callRequests={callRequests}
-          onAcceptRequest={acceptRequest}
-          onCompleteRequest={completeRequest}
-          onCancelRequest={cancelRequest}
-        />
-
-        {/* Navigation Section 2: Contact Management */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-blue-700 overflow-hidden">
-          <button
-            onClick={() => setShowContactManagement(!showContactManagement)}
-            className="w-full p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 hover:bg-blue-700 transition-all duration-200"
-          >
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="bg-white p-2 rounded-full flex-shrink-0">
-                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+        {/* Client Self-Service Section */}
+        {activeSection === 'client-service' && (
+          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-green-700">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="bg-white p-2 rounded-full flex-shrink-0">
+                  <Users className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Self-Service Portal</h2>
+                  <p className="text-xs sm:text-sm text-green-50">Allow clients to categorize calling purpose and request callbacks</p>
+                </div>
               </div>
-              <div className="text-left">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
-                <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+              <button
+                onClick={() => setShowClientPortal(!showClientPortal)}
+                className={`w-full sm:w-auto mobile-button px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg font-bold transition-all duration-200 shadow-xl whitespace-nowrap text-sm sm:text-base ${
+                  showClientPortal
+                    ? 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
+                    : 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
+                }`}
+              >
+                {showClientPortal ? 'Hide Portal ↑' : 'Show Portal ↓'}
+              </button>
+            </div>
+
+            {showClientPortal && (
+              <div className="bg-white rounded-lg p-4 mb-4">
+                <ClientPurposeSelector
+                  businessPhone="+1 (555) 123-4567"
+                  businessName="Your Business"
+                  onClientPurposeSelected={(name, phone, purpose) => {
+                    addCallRequest(name, phone, purpose);
+                  }}
+                />
+              </div>
+            )}
+
+            <ClientCallRequestManager
+              callRequests={callRequests}
+              onAcceptRequest={acceptRequest}
+              onCompleteRequest={completeRequest}
+              onCancelRequest={cancelRequest}
+            />
+          </div>
+        )}
+
+        {/* Contact Management Section */}
+        {activeSection === 'contact-management' && (
+          <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-blue-700 overflow-hidden">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+                <div className="bg-white p-2 rounded-full flex-shrink-0">
+                  <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
+                  <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-4 sm:p-6">
+                <ContactManager
+                  employees={allEmployees}
+                  onAddContact={addContact}
+                  onDeleteContact={deleteContact}
+                  isAutoCallActive={isAutoCallActive}
+                  filterType={contactFilter}
+                  onFilterChange={setContactFilter}
+                />
               </div>
             </div>
-            <div className="bg-white text-blue-600 px-4 py-2 rounded-lg font-bold text-sm sm:text-base flex-shrink-0">
-              {showContactManagement ? '\u2191 Collapse' : '\u2193 Expand'}
-            </div>
-          </button>
+          </div>
+        )}
 
-          {showContactManagement && (
-            <div className="bg-white p-4 sm:p-6">
-              <ContactManager
-                employees={allEmployees}
-                onAddContact={addContact}
-                onDeleteContact={deleteContact}
-                isAutoCallActive={isAutoCallActive}
-                filterType={contactFilter}
-                onFilterChange={setContactFilter}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Navigation Section 3: Calling System & Features */}
-        <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-slate-800 overflow-hidden">
-          <button
-            onClick={() => setShowCallingSystem(!showCallingSystem)}
-            className="w-full p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 hover:bg-slate-800 transition-all duration-200"
-          >
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="bg-white p-2 rounded-full flex-shrink-0">
-                <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+        {/* Call Status Section */}
+        {activeSection === 'call-status' && (
+          <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-slate-800 overflow-hidden">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+                <div className="bg-white p-2 rounded-full flex-shrink-0">
+                  <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Call Status Dashboard</h2>
+                  <p className="text-xs sm:text-sm text-slate-200">Monitor call statistics and view detailed reports</p>
+                </div>
               </div>
-              <div className="text-left">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Calling System Dashboard</h2>
-                <p className="text-xs sm:text-sm text-slate-200">Monitor calls, control system, and manage business operations</p>
-              </div>
-            </div>
-            <div className="bg-white text-slate-700 px-4 py-2 rounded-lg font-bold text-sm sm:text-base flex-shrink-0">
-              {showCallingSystem ? '\u2191 Collapse' : '\u2193 Expand'}
-            </div>
-          </button>
 
-          {showCallingSystem && (
-            <div className="bg-white p-4 sm:p-6 space-y-4">
-              {/* Call Status Dashboard */}
-              <div className="border-2 border-slate-200 rounded-lg p-4">
-                <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
-                  <span className="bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-sm mr-2">1</span>
-                  Call Status Dashboard
-                </h3>
+              <div className="bg-white rounded-lg p-4">
                 <CallStatus
                   stats={stats}
                   isAutoCallActive={isAutoCallActive}
@@ -510,13 +555,25 @@ function App() {
                   employees={employees}
                 />
               </div>
+            </div>
+          </div>
+        )}
 
-              {/* Control Panel */}
-              <div className="border-2 border-slate-200 rounded-lg p-4">
-                <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
-                  <span className="bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-sm mr-2">2</span>
-                  System Controls
-                </h3>
+        {/* System Controls Section */}
+        {activeSection === 'system-controls' && (
+          <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-slate-800 overflow-hidden">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+                <div className="bg-white p-2 rounded-full flex-shrink-0">
+                  <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">System Controls</h2>
+                  <p className="text-xs sm:text-sm text-slate-200">Manage calling system and business operations</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-4">
                 <ControlPanel
                   isAutoCallActive={isAutoCallActive}
                   onStartAutoCalling={startAutoCalling}
@@ -530,71 +587,106 @@ function App() {
                   selectedBusiness={selectedBusiness}
                   onBusinessChange={setSelectedBusiness}
                   businesses={businesses}
-                  onManageBusinesses={() => setShowBusinessManager(true)}
+                  onManageBusinesses={() => setActiveSection('business-manager')}
                 />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Client List */}
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            <div className="flex items-center space-x-2">
-            <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
-            <span>Client Directory</span>
-            </div>
-            {isAutoCallActive && (
-              <span className="text-xs sm:text-sm bg-blue-100 text-blue-800 px-2 sm:px-3 py-1 rounded-full animate-pulse">
-                Auto Calling Active - Answered Clients Hidden
-              </span>
-            )}
-          </h2>
-
-          {(() => {
-            // Filter logic: during auto-calling, ONLY show contacts that haven't answered yet
-            const visibleEmployees = isAutoCallActive
-              ? employees.filter(emp => emp.status !== 'answered')
-              : employees;
-
-            return visibleEmployees.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {visibleEmployees.map((employee, index) => (
-                  <EmployeeCard
-                    key={employee.id}
-                    employee={employee}
-                    isCurrentlyCalling={currentCallingId === employee.id}
-                    isCurrentEmployee={employees.findIndex(e => e.id === employee.id) === currentEmployeeIndex}
-                    onCallEmployee={callEmployee}
-                    onUpdatePriority={updatePriority}
-                    isAutoCallActive={isAutoCallActive}
-                    onOpenWhatsApp={handleOpenWhatsApp}
-                    onViewHistory={handleViewHistory}
-                    onScheduleAppointment={handleScheduleAppointment}
-                  />
-                ))}
+        {/* Business Manager Section */}
+        {activeSection === 'business-manager' && (
+          <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-orange-700 overflow-hidden">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+                <div className="bg-white p-2 rounded-full flex-shrink-0">
+                  <Users className="w-6 h-6 sm:w-7 sm:h-7 text-orange-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Business Manager</h2>
+                  <p className="text-xs sm:text-sm text-orange-50">Create and manage business profiles for filtering</p>
+                </div>
               </div>
-            ) : (
-              <div className="text-center py-12">
-                {isAutoCallActive ? (
-                  <>
-                    <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <PhoneCall className="w-8 h-8 text-green-600" />
-                    </div>
-                    <p className="text-green-600 text-xl font-bold mb-2">🎉 All Clients Answered Successfully!</p>
-                    <p className="text-gray-600 mt-2">Auto-calling has stopped automatically.</p>
-                    <p className="text-gray-500 text-sm mt-1">No more clients need to be called.</p>
-                  </>
-                ) : (
-                  <>
-                    <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg">No clients added yet...</p>
-                  </>
+
+              <div className="bg-white rounded-lg p-4">
+                <BusinessManager
+                  businesses={businesses}
+                  onClose={() => setActiveSection('system-controls')}
+                  onBusinessesUpdate={setBusinesses}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Client Directory Section */}
+        {activeSection === 'client-directory' && (
+          <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-cyan-700 overflow-hidden">
+            <div className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
+                <div className="flex items-center space-x-2">
+                  <div className="bg-white p-2 rounded-full flex-shrink-0">
+                    <Users className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Directory</h2>
+                    <p className="text-xs sm:text-sm text-cyan-50">View and manage all clients</p>
+                  </div>
+                </div>
+                {isAutoCallActive && (
+                  <span className="text-xs sm:text-sm bg-white text-cyan-600 px-3 py-1.5 rounded-full font-semibold animate-pulse">
+                    Auto Calling Active - Answered Clients Hidden
+                  </span>
                 )}
               </div>
-            );
-          })()}
-        </div>
+
+              <div className="bg-white rounded-lg p-4">
+                {(() => {
+                  const visibleEmployees = isAutoCallActive
+                    ? employees.filter(emp => emp.status !== 'answered')
+                    : employees;
+
+                  return visibleEmployees.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                      {visibleEmployees.map((employee, index) => (
+                        <EmployeeCard
+                          key={employee.id}
+                          employee={employee}
+                          isCurrentlyCalling={currentCallingId === employee.id}
+                          isCurrentEmployee={employees.findIndex(e => e.id === employee.id) === currentEmployeeIndex}
+                          onCallEmployee={callEmployee}
+                          onUpdatePriority={updatePriority}
+                          isAutoCallActive={isAutoCallActive}
+                          onOpenWhatsApp={handleOpenWhatsApp}
+                          onViewHistory={handleViewHistory}
+                          onScheduleAppointment={handleScheduleAppointment}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      {isAutoCallActive ? (
+                        <>
+                          <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <PhoneCall className="w-8 h-8 text-green-600" />
+                          </div>
+                          <p className="text-green-600 text-xl font-bold mb-2">All Clients Answered Successfully!</p>
+                          <p className="text-gray-600 mt-2">Auto-calling has stopped automatically.</p>
+                          <p className="text-gray-500 text-sm mt-1">No more clients need to be called.</p>
+                        </>
+                      ) : (
+                        <>
+                          <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                          <p className="text-gray-500 text-lg">No clients added yet...</p>
+                        </>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Instructions */}
         <div className="mt-6 sm:mt-8 bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
@@ -738,16 +830,6 @@ function App() {
           />
         )}
 
-        {/* Business Manager Modal */}
-        {showBusinessManager && (
-          <BusinessManager
-            businesses={businesses}
-            onAddBusiness={handleAddBusiness}
-            onUpdateBusiness={handleUpdateBusiness}
-            onDeleteBusiness={handleDeleteBusiness}
-            onClose={() => setShowBusinessManager(false)}
-          />
-        )}
         </div>
       </div>
     </AuthWrapper>
