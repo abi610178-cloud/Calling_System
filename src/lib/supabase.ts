@@ -72,33 +72,22 @@ export const auth = {
     if (!supabase) {
       throw new Error('Supabase is not configured. Please check your environment variables.');
     }
-    try {
-      return await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-    } catch (error) {
-      console.error('Sign up failed:', error);
-      throw new Error('Failed to sign up. Please check your internet connection and try again.');
-    }
+    const result = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    return result;
   },
 
   signIn: async (email: string, password: string) => {
     if (!supabase) {
       throw new Error('Supabase is not configured. Please check your environment variables.');
     }
-    try {
-      return await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-    } catch (error) {
-      console.error('Sign in failed:', error);
-      throw new Error('Failed to sign in. Please check your credentials and internet connection.');
-    }
+    const result = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return result;
   },
 
   signOut: async () => {

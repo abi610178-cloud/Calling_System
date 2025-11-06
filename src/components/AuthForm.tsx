@@ -19,14 +19,30 @@ export const AuthForm: React.FC = () => {
     try {
       if (isSignUp) {
         const { error } = await auth.signUp(email, password);
-        if (error) throw error;
-        setMessage('Check your email for the confirmation link!');
+        if (error) {
+          setError(error.message || 'Failed to create account. Please try again.');
+          setLoading(false);
+          return;
+        }
+        setMessage('Account created successfully! You can now sign in.');
+        setIsSignUp(false);
+        setPassword('');
       } else {
-        const { error } = await auth.signIn(email, password);
-        if (error) throw error;
+        const { data, error } = await auth.signIn(email, password);
+        if (error) {
+          setError(error.message || 'Invalid email or password. Please try again.');
+          setLoading(false);
+          return;
+        }
+        if (!data.session) {
+          setError('Login failed. Please try again.');
+          setLoading(false);
+          return;
+        }
       }
     } catch (error: any) {
-      setError(error.message);
+      console.error('Auth error:', error);
+      setError(error.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
