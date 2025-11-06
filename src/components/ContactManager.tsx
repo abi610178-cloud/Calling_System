@@ -98,24 +98,18 @@ export const ContactManager: React.FC<ContactManagerProps> = ({
     }
   };
   return (
-    <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 sm:mb-6">
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          <div className="bg-blue-100 p-2 rounded-full flex-shrink-0">
-            <Users className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
-          </div>
-          <div>
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">Contact Management</h2>
-            <p className="text-xs sm:text-sm text-gray-600">
-              {userAddedEmployees.length} contacts added
-            </p>
-          </div>
+    <div>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+        <div>
+          <p className="text-sm text-gray-600">
+            {userAddedEmployees.length} contacts added
+          </p>
         </div>
-        
+
         <button
           onClick={() => setShowForm(true)}
           disabled={isAutoCallActive}
-          className="w-full sm:w-auto mobile-button-primary disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-md hover:shadow-lg text-sm sm:text-base"
+          className="w-full sm:w-auto px-4 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-md hover:shadow-lg text-sm transition-all duration-200"
         >
           <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" />
           <span>Add Contact</span>
@@ -123,7 +117,7 @@ export const ContactManager: React.FC<ContactManagerProps> = ({
       </div>
 
       {/* Search and Filter */}
-      <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <div className="flex flex-col gap-3 mb-4">
         <div className="flex-1 relative">
           <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
@@ -131,16 +125,16 @@ export const ContactManager: React.FC<ContactManagerProps> = ({
             placeholder="Search contacts by name, phone, email, position, or department..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mobile-input text-sm sm:text-base pl-10 pr-4"
+            className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           />
         </div>
-        
+
         <div className="relative">
           <Filter className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <select
             value={currentFilterType}
             onChange={(e) => handleFilterChange(e.target.value as 'all' | 'default' | 'custom' | 'completed' | 'answered' | 'missed' | 'pending' | 'urgent')}
-            className="w-full mobile-input text-sm sm:text-base pl-10 pr-8 bg-white"
+            className="w-full px-4 py-2.5 pl-10 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm"
           >
             <option value="all">All Contacts</option>
             <option value="custom">Custom Contacts</option>
@@ -154,24 +148,24 @@ export const ContactManager: React.FC<ContactManagerProps> = ({
       </div>
 
       {/* Statistics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <div className="bg-blue-50 rounded-lg p-3 sm:p-4 text-center border border-blue-200">
-          <div className="text-xl sm:text-2xl font-bold text-blue-800">{employees.length}</div>
-          <div className="text-xs sm:text-sm text-blue-600">Total Contacts</div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+        <div className="bg-blue-50 rounded-lg p-3 text-center border border-blue-200">
+          <div className="text-2xl font-bold text-blue-800">{employees.length}</div>
+          <div className="text-xs text-blue-600">Total Contacts</div>
         </div>
-        <div className="bg-blue-50 rounded-lg p-3 sm:p-4 text-center border border-blue-200">
-          <div className="text-xl sm:text-2xl font-bold text-blue-800">{userAddedEmployees.length}</div>
-          <div className="text-xs sm:text-sm text-blue-600">Added</div>
+        <div className="bg-blue-50 rounded-lg p-3 text-center border border-blue-200">
+          <div className="text-2xl font-bold text-blue-800">{userAddedEmployees.length}</div>
+          <div className="text-xs text-blue-600">Added</div>
         </div>
-        <div className="bg-yellow-50 rounded-lg p-3 sm:p-4 text-center border border-yellow-200">
-          <div className="text-xl sm:text-2xl font-bold text-yellow-800">{filteredEmployees.length}</div>
-          <div className="text-xs sm:text-sm text-yellow-600">Filtered</div>
+        <div className="bg-yellow-50 rounded-lg p-3 text-center border border-yellow-200">
+          <div className="text-2xl font-bold text-yellow-800">{filteredEmployees.length}</div>
+          <div className="text-xs text-yellow-600">Filtered</div>
         </div>
-        <div className="bg-green-50 rounded-lg p-3 sm:p-4 text-center border border-green-200">
-          <div className="text-xl sm:text-2xl font-bold text-green-800">
+        <div className="bg-green-50 rounded-lg p-3 text-center border border-green-200">
+          <div className="text-2xl font-bold text-green-800">
             {employees.filter(emp => emp.status === 'answered').length}
           </div>
-          <div className="text-xs sm:text-sm text-green-600">Answered</div>
+          <div className="text-xs text-green-600">Answered</div>
         </div>
       </div>
 

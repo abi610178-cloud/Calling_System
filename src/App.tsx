@@ -430,77 +430,109 @@ function App() {
         />
 
         {/* Navigation Section 2: Contact Management */}
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-blue-700">
-          <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
-            <div className="bg-white p-2 rounded-full flex-shrink-0">
-              <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-blue-700 overflow-hidden">
+          <button
+            onClick={() => setShowContactManagement(!showContactManagement)}
+            className="w-full p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 hover:bg-blue-700 transition-all duration-200"
+          >
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="bg-white p-2 rounded-full flex-shrink-0">
+                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
+                <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
-              <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+            <div className="bg-white text-blue-600 px-4 py-2 rounded-lg font-bold text-sm sm:text-base flex-shrink-0">
+              {showContactManagement ? '\u2191 Collapse' : '\u2193 Expand'}
             </div>
-          </div>
+          </button>
 
-          <div className="bg-white rounded-lg p-4">
-            <ContactManager
-              employees={allEmployees}
-              onAddContact={addContact}
-              onDeleteContact={deleteContact}
-              isAutoCallActive={isAutoCallActive}
-              filterType={contactFilter}
-              onFilterChange={setContactFilter}
-            />
-          </div>
+          {showContactManagement && (
+            <div className="bg-white p-4 sm:p-6">
+              <ContactManager
+                employees={allEmployees}
+                onAddContact={addContact}
+                onDeleteContact={deleteContact}
+                isAutoCallActive={isAutoCallActive}
+                filterType={contactFilter}
+                onFilterChange={setContactFilter}
+              />
+            </div>
+          )}
         </div>
 
         {/* Navigation Section 3: Calling System & Features */}
-        <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-slate-800">
-          <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
-            <div className="bg-white p-2 rounded-full flex-shrink-0">
-              <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+        <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-slate-800 overflow-hidden">
+          <button
+            onClick={() => setShowCallingSystem(!showCallingSystem)}
+            className="w-full p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 hover:bg-slate-800 transition-all duration-200"
+          >
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="bg-white p-2 rounded-full flex-shrink-0">
+                <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+              </div>
+              <div className="text-left">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Calling System Dashboard</h2>
+                <p className="text-xs sm:text-sm text-slate-200">Monitor calls, control system, and manage business operations</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Calling System Dashboard</h2>
-              <p className="text-xs sm:text-sm text-slate-200">Monitor calls, control system, and manage business operations</p>
+            <div className="bg-white text-slate-700 px-4 py-2 rounded-lg font-bold text-sm sm:text-base flex-shrink-0">
+              {showCallingSystem ? '\u2191 Collapse' : '\u2193 Expand'}
             </div>
-          </div>
+          </button>
 
-          {/* Call Status Dashboard */}
-          <div className="mb-6">
-            <CallStatus
-              stats={stats}
-              isAutoCallActive={isAutoCallActive}
-              currentEmployeeIndex={currentEmployeeIndex}
-              totalEmployees={employees.length}
-              onFilterCompleted={handleFilterCompleted}
-              onFilterAnswered={handleFilterAnswered}
-              onFilterMissed={handleFilterMissed}
-              onFilterPending={handleFilterPending}
-              onFilterUrgent={handleFilterUrgent}
-              onShowMonthlyAppointments={handleShowMonthlyAppointments}
-              onShowCurrentClient={handleShowCurrentClient}
-              onShowRoundInfo={handleShowRoundInfo}
-              onShowTotalDetails={handleShowTotalDetails}
-              employees={employees}
-            />
-          </div>
+          {showCallingSystem && (
+            <div className="bg-white p-4 sm:p-6 space-y-4">
+              {/* Call Status Dashboard */}
+              <div className="border-2 border-slate-200 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                  <span className="bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-sm mr-2">1</span>
+                  Call Status Dashboard
+                </h3>
+                <CallStatus
+                  stats={stats}
+                  isAutoCallActive={isAutoCallActive}
+                  currentEmployeeIndex={currentEmployeeIndex}
+                  totalEmployees={employees.length}
+                  onFilterCompleted={handleFilterCompleted}
+                  onFilterAnswered={handleFilterAnswered}
+                  onFilterMissed={handleFilterMissed}
+                  onFilterPending={handleFilterPending}
+                  onFilterUrgent={handleFilterUrgent}
+                  onShowMonthlyAppointments={handleShowMonthlyAppointments}
+                  onShowCurrentClient={handleShowCurrentClient}
+                  onShowRoundInfo={handleShowRoundInfo}
+                  onShowTotalDetails={handleShowTotalDetails}
+                  employees={employees}
+                />
+              </div>
 
-          {/* Control Panel */}
-          <ControlPanel
-            isAutoCallActive={isAutoCallActive}
-            onStartAutoCalling={startAutoCalling}
-            onStopAutoCalling={stopAutoCalling}
-            onResetSystem={resetSystem}
-            hasEmployees={employees.length > 0}
-            currentRound={stats.currentRound}
-            currentEmployeeIndex={currentEmployeeIndex}
-            totalEmployees={employees.length}
-            onShowCalendar={handleShowCalendar}
-            selectedBusiness={selectedBusiness}
-            onBusinessChange={setSelectedBusiness}
-            businesses={businesses}
-            onManageBusinesses={() => setShowBusinessManager(true)}
-          />
+              {/* Control Panel */}
+              <div className="border-2 border-slate-200 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center">
+                  <span className="bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-sm mr-2">2</span>
+                  System Controls
+                </h3>
+                <ControlPanel
+                  isAutoCallActive={isAutoCallActive}
+                  onStartAutoCalling={startAutoCalling}
+                  onStopAutoCalling={stopAutoCalling}
+                  onResetSystem={resetSystem}
+                  hasEmployees={employees.length > 0}
+                  currentRound={stats.currentRound}
+                  currentEmployeeIndex={currentEmployeeIndex}
+                  totalEmployees={employees.length}
+                  onShowCalendar={handleShowCalendar}
+                  selectedBusiness={selectedBusiness}
+                  onBusinessChange={setSelectedBusiness}
+                  businesses={businesses}
+                  onManageBusinesses={() => setShowBusinessManager(true)}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Client List */}
