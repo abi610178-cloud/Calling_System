@@ -14,6 +14,7 @@ import { ClientCallRequestManager } from './components/ClientCallRequestManager'
 import { useClientCallRequests } from './hooks/useClientCallRequests';
 import { ClientPurposeSelector } from './components/ClientPurposeSelector';
 import { BusinessManager } from './components/BusinessManager';
+import { AppointmentReminder } from './components/AppointmentReminder';
 import { PhoneCall, Users, Zap, Phone } from 'lucide-react';
 import { Employee, WorkHistory, Appointment, ClientFeedback, ClientReview } from './types/Employee';
 import { supabase } from './lib/supabase';
@@ -360,6 +361,10 @@ function App() {
   return (
     <AuthWrapper>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-slate-50">
+        <AppointmentReminder
+          appointments={clientHistory.appointments}
+          employees={allEmployees}
+        />
         <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-6 sm:mb-8">
