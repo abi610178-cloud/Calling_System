@@ -278,7 +278,6 @@ export class SupabaseService {
       .from('work_history')
       .select('*')
       .eq('client_id', clientId)
-      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -307,7 +306,6 @@ export class SupabaseService {
       .from('work_history')
       .insert({
         client_id: clientId,
-        user_id: user.id,
         work_type: workData.workType,
         work_description: workData.workDescription || null,
         start_date: workData.startDate?.toISOString() || null,
@@ -345,7 +343,6 @@ export class SupabaseService {
       .from('appointments')
       .select('*')
       .eq('client_id', clientId)
-      .eq('user_id', user.id)
       .order('appointment_date', { ascending: true });
 
     if (error) {
@@ -372,7 +369,6 @@ export class SupabaseService {
       .from('appointments')
       .insert({
         client_id: clientId,
-        user_id: user.id,
         appointment_date: appointmentData.appointmentDate.toISOString(),
         appointment_type: appointmentData.appointmentType,
         status: appointmentData.status,
@@ -415,10 +411,26 @@ export class SupabaseService {
     endOfMonth.setHours(23, 59, 59, 999);
 
     try {
+      // Get all clients for this user first
+      const { data: clients, error: clientError } = await supabase
+        .from('clients')
+        .select('id')
+        .eq('user_id', user.id);
+
+      if (clientError) {
+        throw new Error(`Failed to fetch clients: ${clientError.message}`);
+      }
+
+      if (!clients || clients.length === 0) {
+        return 0;
+      }
+
+      const clientIds = clients.map(c => c.id);
+
       const { data, error } = await supabase
         .from('appointments')
         .select('id')
-        .eq('user_id', user.id)
+        .in('client_id', clientIds)
         .gte('appointment_date', startOfMonth.toISOString())
         .lte('appointment_date', endOfMonth.toISOString());
 
@@ -451,7 +463,6 @@ export class SupabaseService {
       .from('client_feedback')
       .select('*')
       .eq('client_id', clientId)
-      .eq('user_id', user.id)
       .order('feedback_date', { ascending: false });
 
     if (error) {
@@ -477,7 +488,6 @@ export class SupabaseService {
       .from('client_feedback')
       .insert({
         client_id: clientId,
-        user_id: user.id,
         rating: feedbackData.rating,
         feedback_text: feedbackData.feedbackText || null,
         feedback_date: feedbackData.feedbackDate.toISOString(),

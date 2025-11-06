@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Calendar, Clock, User, Plus, X, Check, Bookmark } from 'lucide-react';
 import { Appointment } from '../types/Employee';
 
@@ -30,8 +30,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [selectedDateSchedules, setSelectedDateSchedules] = useState<Appointment[]>([]);
   const [reminders, setReminders] = useState<Appointment[]>([]);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
 
   // Check for reminders (appointments tomorrow)
   useEffect(() => {
@@ -72,51 +75,70 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       return () => clearTimeout(alertTimer);
     }
   }, [appointments]);
-  // Simple functions without memoization for instant response
+
+  // Memoize appointments by date for better performance
+  const appointmentsByDate = useMemo(() => {
+    const map = new Map<string, Appointment[]>();
+    appointments.forEach(apt => {
+      if (apt.status !== 'cancelled') {
+        const dateStr = new Date(apt.appointmentDate).toDateString();
+        const existing = map.get(dateStr) || [];
+        map.set(dateStr, [...existing, apt]);
+      }
+    });
+    return map;
+  }, [appointments]);
+
+  // Memoize marked dates set for faster lookups
+  const markedDatesSet = useMemo(() => {
+    return new Set(markedDates.map(d => d.toDateString()));
+  }, [markedDates]);
+
+  // Memoize employee lookup map
+  const employeeMap = useMemo(() => {
+    const map = new Map<string, any>();
+    employees.forEach(emp => map.set(emp.id, emp));
+    return map;
+  }, [employees]);
+
   const getAppointmentsForDate = (date: Date) => {
-    const dateStr = date.toDateString();
-    return appointments.filter(apt => 
-      new Date(apt.appointmentDate).toDateString() === dateStr &&
-      apt.status !== 'cancelled'
-    );
+    return appointmentsByDate.get(date.toDateString()) || [];
   };
 
   const isDateAvailable = (date: Date) => {
     const dayAppointments = getAppointmentsForDate(date);
-    return dayAppointments.length < 8; // Max 8 appointments per day
+    return dayAppointments.length < 8;
   };
 
   const isDateMarked = (date: Date) => {
-    return markedDates.some(markedDate => markedDate.toDateString() === date.toDateString());
+    return markedDatesSet.has(date.toDateString());
   };
 
   const getClientName = (clientId: string) => {
-    if (!employees || employees.length === 0) {
-      return 'Loading...';
-    }
-    const client = employees.find(emp => emp.id === clientId);
+    const client = employeeMap.get(clientId);
     return client ? client.name : 'Client Not Found';
   };
-  // Generate calendar days
-  const getCalendarDays = () => {
+
+  // Memoize calendar days generation
+  const calendarDays = useMemo(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-    
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
+
     const days = [];
     const currentDay = new Date(startDate);
-    
+
     for (let i = 0; i < 42; i++) {
       days.push(new Date(currentDay));
       currentDay.setDate(currentDay.getDate() + 1);
     }
-    
+
     return days;
-  };
+  }, [currentDate]);
 
   // Navigate months
   const navigateMonth = (direction: 'prev' | 'next') => {
@@ -166,8 +188,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-
-  const calendarDays = getCalendarDays();
 
   return (
     <>
