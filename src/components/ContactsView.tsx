@@ -92,8 +92,12 @@ export const ContactsView: React.FC<ContactsViewProps> = ({
           <h3 className="text-lg font-semibold text-gray-800">Add New Contact</h3>
         </div>
         <ContactManager
+          employees={allEmployees}
           onAddContact={onAddContact}
-          selectedBusiness={selectedBusiness}
+          onDeleteContact={onDeleteContact}
+          isAutoCallActive={false}
+          filterType={contactFilter}
+          onFilterChange={setContactFilter}
         />
       </div>
 

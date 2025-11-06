@@ -339,15 +339,19 @@ function App() {
 
       case 'calendar':
         return (
-          <div className="p-6">
-            <CalendarModal
-              appointments={clientHistory.appointments}
-              onClose={() => {}}
-              markedDates={markedDates}
-              onMarkDate={handleMarkDate}
-              onUnmarkDate={handleUnmarkDate}
-              employees={allEmployees}
-            />
+          <div className="p-6 space-y-6">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Calendar & Appointments</h2>
+              <p className="text-gray-600">View and manage all appointments</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+              <button
+                onClick={() => handleShowCalendar(allEmployees[0] || {} as Employee)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all"
+              >
+                Open Calendar
+              </button>
+            </div>
           </div>
         );
 
@@ -374,13 +378,34 @@ function App() {
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Business Management</h2>
               <p className="text-gray-600">Manage your business information</p>
             </div>
-            <BusinessManager
-              businesses={businesses}
-              onAddBusiness={handleAddBusiness}
-              onUpdateBusiness={handleUpdateBusiness}
-              onDeleteBusiness={handleDeleteBusiness}
-              onClose={() => {}}
-            />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+              <button
+                onClick={() => setShowBusinessManager(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all"
+              >
+                Manage Businesses
+              </button>
+              {businesses.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Your Businesses</h3>
+                  <div className="space-y-3">
+                    {businesses.map(business => (
+                      <div key={business.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div>
+                          <div className="font-medium text-gray-800">{business.name}</div>
+                          <div className="text-sm text-gray-600">{business.value}</div>
+                        </div>
+                        {business.isDefault && (
+                          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         );
 
@@ -462,6 +487,16 @@ function App() {
             onMarkDate={handleMarkDate}
             onUnmarkDate={handleUnmarkDate}
             employees={allEmployees}
+          />
+        )}
+
+        {showBusinessManager && (
+          <BusinessManager
+            businesses={businesses}
+            onAddBusiness={handleAddBusiness}
+            onUpdateBusiness={handleUpdateBusiness}
+            onDeleteBusiness={handleDeleteBusiness}
+            onClose={() => setShowBusinessManager(false)}
           />
         )}
       </div>
