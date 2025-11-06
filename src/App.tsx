@@ -400,7 +400,7 @@ function App() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Client Self-Service
+              Complaints
             </button>
             <button
               onClick={() => setActiveSection('contact-management')}
@@ -410,7 +410,7 @@ function App() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Contact Management
+              Lead Management
             </button>
             <button
               onClick={() => setActiveSection('call-status')}
@@ -430,7 +430,7 @@ function App() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              System Controls
+              Auto Call
             </button>
             <button
               onClick={() => setActiveSection('business-manager')}
@@ -440,7 +440,7 @@ function App() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Business Manager
+              New Business
             </button>
             <button
               onClick={() => setActiveSection('client-directory')}
@@ -450,7 +450,7 @@ function App() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Client Directory
+              Client History
             </button>
           </div>
         </div>
@@ -464,8 +464,8 @@ function App() {
                   <Users className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Self-Service Portal</h2>
-                  <p className="text-xs sm:text-sm text-green-50">Allow clients to categorize calling purpose and request callbacks</p>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Complaints</h2>
+                  <p className="text-xs sm:text-sm text-green-50">Client complaints and callback requests</p>
                 </div>
               </div>
               <button
@@ -501,7 +501,7 @@ function App() {
           </div>
         )}
 
-        {/* Contact Management Section */}
+        {/* Lead Management Section */}
         {activeSection === 'contact-management' && (
           <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-blue-700 overflow-hidden">
             <div className="p-4 sm:p-6">
@@ -510,8 +510,8 @@ function App() {
                   <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
-                  <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Lead Management</h2>
+                  <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your leads</p>
                 </div>
               </div>
 
@@ -565,7 +565,7 @@ function App() {
           </div>
         )}
 
-        {/* System Controls Section */}
+        {/* Auto Call Section */}
         {activeSection === 'system-controls' && (
           <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-slate-800 overflow-hidden">
             <div className="p-4 sm:p-6">
@@ -574,8 +574,8 @@ function App() {
                   <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
                 </div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">System Controls</h2>
-                  <p className="text-xs sm:text-sm text-slate-200">Manage calling system and business operations</p>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Auto Call</h2>
+                  <p className="text-xs sm:text-sm text-slate-200">Automated calling system and operations</p>
                 </div>
               </div>
 
@@ -600,7 +600,7 @@ function App() {
           </div>
         )}
 
-        {/* Business Manager Section */}
+        {/* New Business Section */}
         {activeSection === 'business-manager' && (
           <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-orange-700 overflow-hidden">
             <div className="p-4 sm:p-6">
@@ -609,7 +609,7 @@ function App() {
                   <Users className="w-6 h-6 sm:w-7 sm:h-7 text-orange-600" />
                 </div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Business Manager</h2>
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">New Business</h2>
                   <p className="text-xs sm:text-sm text-orange-50">Create and manage business profiles for filtering</p>
                 </div>
               </div>
@@ -627,7 +627,7 @@ function App() {
           </div>
         )}
 
-        {/* Client Directory Section */}
+        {/* Client History Section */}
         {activeSection === 'client-directory' && (
           <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl shadow-lg mb-6 sm:mb-8 border-2 border-cyan-700 overflow-hidden">
             <div className="p-4 sm:p-6">
@@ -637,7 +637,7 @@ function App() {
                     <Users className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-600" />
                   </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Directory</h2>
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client History</h2>
                     <p className="text-xs sm:text-sm text-cyan-50">View and manage all clients</p>
                   </div>
                 </div>
