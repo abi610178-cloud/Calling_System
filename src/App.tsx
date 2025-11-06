@@ -383,78 +383,43 @@ function App() {
           </p>
         </div>
 
-        {/* Call Status Dashboard */}
-        <CallStatus 
-          stats={stats} 
-          isAutoCallActive={isAutoCallActive}
-          currentEmployeeIndex={currentEmployeeIndex}
-          totalEmployees={employees.length}
-          onFilterCompleted={handleFilterCompleted}
-          onFilterAnswered={handleFilterAnswered}
-          onFilterMissed={handleFilterMissed}
-          onFilterPending={handleFilterPending}
-          onFilterUrgent={handleFilterUrgent}
-          onShowMonthlyAppointments={handleShowMonthlyAppointments}
-          onShowCurrentClient={handleShowCurrentClient}
-          onShowRoundInfo={handleShowRoundInfo}
-          onShowTotalDetails={handleShowTotalDetails}
-          employees={employees}
-        />
-
-        {/* Control Panel */}
-        <ControlPanel
-          isAutoCallActive={isAutoCallActive}
-          onStartAutoCalling={startAutoCalling}
-          onStopAutoCalling={stopAutoCalling}
-          onResetSystem={resetSystem}
-          hasEmployees={employees.length > 0}
-          currentRound={stats.currentRound}
-          currentEmployeeIndex={currentEmployeeIndex}
-          totalEmployees={employees.length}
-          onShowCalendar={handleShowCalendar}
-          selectedBusiness={selectedBusiness}
-          onBusinessChange={setSelectedBusiness}
-          businesses={businesses}
-          onManageBusinesses={() => setShowBusinessManager(true)}
-        />
-
-        {/* Client Portal Toggle */}
-        <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+        {/* Navigation Section 1: Client Self-Service */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-green-700">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-center space-x-2 sm:space-x-3">
-              <div className="bg-green-100 p-2 rounded-full flex-shrink-0">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+              <div className="bg-white p-2 rounded-full flex-shrink-0">
+                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-green-600" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800">Client Self-Service</h2>
-                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Allow clients to categorize calling purpose</p>
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Client Self-Service Portal</h2>
+                <p className="text-xs sm:text-sm text-green-50">Allow clients to categorize calling purpose and request callbacks</p>
               </div>
             </div>
             <button
               onClick={() => setShowClientPortal(!showClientPortal)}
-              className={`w-full sm:w-auto mobile-button px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition-all duration-200 shadow-md whitespace-nowrap text-sm sm:text-base ${
+              className={`w-full sm:w-auto mobile-button px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg font-bold transition-all duration-200 shadow-xl whitespace-nowrap text-sm sm:text-base ${
                 showClientPortal
-                  ? 'bg-red-500 hover:bg-red-600 active:bg-red-700 text-white'
-                  : 'bg-green-500 hover:bg-green-600 active:bg-green-700 text-white'
+                  ? 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
+                  : 'bg-white text-green-600 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
-              {showClientPortal ? 'Hide Portal' : 'Show Portal'}
+              {showClientPortal ? 'Hide Portal ↑' : 'Show Portal ↓'}
             </button>
           </div>
-        </div>
 
-        {/* Client Portal */}
-        {showClientPortal && (
-          <div className="mb-8">
-            <ClientPurposeSelector
-              businessPhone="+1 (555) 123-4567"
-              businessName="Your Business"
-              onClientPurposeSelected={(name, phone, purpose) => {
-                addCallRequest(name, phone, purpose);
-              }}
-            />
-          </div>
-        )}
+          {/* Client Portal Content */}
+          {showClientPortal && (
+            <div className="mt-6 bg-white rounded-lg p-4">
+              <ClientPurposeSelector
+                businessPhone="+1 (555) 123-4567"
+                businessName="Your Business"
+                onClientPurposeSelected={(name, phone, purpose) => {
+                  addCallRequest(name, phone, purpose);
+                }}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Client Call Request Manager */}
         <ClientCallRequestManager
@@ -464,15 +429,79 @@ function App() {
           onCancelRequest={cancelRequest}
         />
 
-        {/* Contact Management */}
-        <ContactManager
-          employees={allEmployees}
-          onAddContact={addContact}
-          onDeleteContact={deleteContact}
-          isAutoCallActive={isAutoCallActive}
-          filterType={contactFilter}
-          onFilterChange={setContactFilter}
-        />
+        {/* Navigation Section 2: Contact Management */}
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-blue-700">
+          <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+            <div className="bg-white p-2 rounded-full flex-shrink-0">
+              <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Contact Management</h2>
+              <p className="text-xs sm:text-sm text-blue-50">Add, edit, and manage all your contacts</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg p-4">
+            <ContactManager
+              employees={allEmployees}
+              onAddContact={addContact}
+              onDeleteContact={deleteContact}
+              isAutoCallActive={isAutoCallActive}
+              filterType={contactFilter}
+              onFilterChange={setContactFilter}
+            />
+          </div>
+        </div>
+
+        {/* Navigation Section 3: Calling System & Features */}
+        <div className="bg-gradient-to-r from-slate-700 to-gray-700 rounded-xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-slate-800">
+          <div className="flex items-center space-x-2 sm:space-x-3 mb-4">
+            <div className="bg-white p-2 rounded-full flex-shrink-0">
+              <PhoneCall className="w-6 h-6 sm:w-7 sm:h-7 text-slate-700" />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">Calling System Dashboard</h2>
+              <p className="text-xs sm:text-sm text-slate-200">Monitor calls, control system, and manage business operations</p>
+            </div>
+          </div>
+
+          {/* Call Status Dashboard */}
+          <div className="mb-6">
+            <CallStatus
+              stats={stats}
+              isAutoCallActive={isAutoCallActive}
+              currentEmployeeIndex={currentEmployeeIndex}
+              totalEmployees={employees.length}
+              onFilterCompleted={handleFilterCompleted}
+              onFilterAnswered={handleFilterAnswered}
+              onFilterMissed={handleFilterMissed}
+              onFilterPending={handleFilterPending}
+              onFilterUrgent={handleFilterUrgent}
+              onShowMonthlyAppointments={handleShowMonthlyAppointments}
+              onShowCurrentClient={handleShowCurrentClient}
+              onShowRoundInfo={handleShowRoundInfo}
+              onShowTotalDetails={handleShowTotalDetails}
+              employees={employees}
+            />
+          </div>
+
+          {/* Control Panel */}
+          <ControlPanel
+            isAutoCallActive={isAutoCallActive}
+            onStartAutoCalling={startAutoCalling}
+            onStopAutoCalling={stopAutoCalling}
+            onResetSystem={resetSystem}
+            hasEmployees={employees.length > 0}
+            currentRound={stats.currentRound}
+            currentEmployeeIndex={currentEmployeeIndex}
+            totalEmployees={employees.length}
+            onShowCalendar={handleShowCalendar}
+            selectedBusiness={selectedBusiness}
+            onBusinessChange={setSelectedBusiness}
+            businesses={businesses}
+            onManageBusinesses={() => setShowBusinessManager(true)}
+          />
+        </div>
 
         {/* Client List */}
         <div className="bg-white rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6">
