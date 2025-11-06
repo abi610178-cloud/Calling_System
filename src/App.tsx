@@ -121,6 +121,8 @@ function App() {
     feedback: ClientFeedback[];
   }>({ workHistory: [], appointments: [], feedback: [] });
   const [showClientPortal, setShowClientPortal] = useState(false);
+  const [showContactManagement, setShowContactManagement] = useState(false);
+  const [showCallingSystem, setShowCallingSystem] = useState(true);
   const [showBusinessManager, setShowBusinessManager] = useState(false);
   const [businesses, setBusinesses] = useState<Array<{ id: string; name: string; value: string; isDefault: boolean }>>([]);
 
