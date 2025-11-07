@@ -125,6 +125,7 @@ function App() {
   const [activeSection, setActiveSection] = useState<'client-service' | 'contact-management' | 'call-status' | 'system-controls' | 'business-manager' | 'client-directory'>('client-service');
   const [showClientPortal, setShowClientPortal] = useState(false);
   const [businesses, setBusinesses] = useState<Array<{ id: string; name: string; value: string; isDefault: boolean }>>([]);
+  const [clientPriorityFilter, setClientPriorityFilter] = useState<'all' | 'high' | 'follow-up' | 'not-interested'>('all');
 
   // Load marked dates from localStorage on mount
   useEffect(() => {
@@ -648,11 +649,60 @@ function App() {
                 )}
               </div>
 
+              {/* Priority Filter Tabs */}
+              <div className="mb-4 flex flex-wrap gap-2">
+                <button
+                  onClick={() => setClientPriorityFilter('all')}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    clientPriorityFilter === 'all'
+                      ? 'bg-white text-cyan-700 shadow-lg'
+                      : 'bg-cyan-500 text-white hover:bg-cyan-400'
+                  }`}
+                >
+                  All Clients ({employees.length})
+                </button>
+                <button
+                  onClick={() => setClientPriorityFilter('high')}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    clientPriorityFilter === 'high'
+                      ? 'bg-white text-green-800 shadow-lg'
+                      : 'bg-green-700 text-white hover:bg-green-600'
+                  }`}
+                >
+                  High Priority ({employees.filter(emp => emp.priority === 'high').length})
+                </button>
+                <button
+                  onClick={() => setClientPriorityFilter('follow-up')}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    clientPriorityFilter === 'follow-up'
+                      ? 'bg-white text-green-700 shadow-lg'
+                      : 'bg-green-400 text-white hover:bg-green-300'
+                  }`}
+                >
+                  Follow Up ({employees.filter(emp => emp.priority === 'follow-up').length})
+                </button>
+                <button
+                  onClick={() => setClientPriorityFilter('not-interested')}
+                  className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${
+                    clientPriorityFilter === 'not-interested'
+                      ? 'bg-white text-red-700 shadow-lg'
+                      : 'bg-red-500 text-white hover:bg-red-400'
+                  }`}
+                >
+                  Not Interested ({employees.filter(emp => emp.priority === 'not-interested').length})
+                </button>
+              </div>
+
               <div className="bg-white rounded-lg p-4">
                 {(() => {
-                  const visibleEmployees = isAutoCallActive
+                  let visibleEmployees = isAutoCallActive
                     ? employees.filter(emp => emp.status !== 'answered')
                     : employees;
+
+                  // Apply priority filter
+                  if (clientPriorityFilter !== 'all') {
+                    visibleEmployees = visibleEmployees.filter(emp => emp.priority === clientPriorityFilter);
+                  }
 
                   return visibleEmployees.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -673,7 +723,17 @@ function App() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      {isAutoCallActive ? (
+                      {clientPriorityFilter !== 'all' ? (
+                        <>
+                          <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                          <p className="text-gray-500 text-lg">No clients in this category</p>
+                          <p className="text-gray-400 text-sm mt-2">
+                            {clientPriorityFilter === 'high' && 'No high priority clients yet'}
+                            {clientPriorityFilter === 'follow-up' && 'No clients marked for follow-up'}
+                            {clientPriorityFilter === 'not-interested' && 'No clients marked as not interested'}
+                          </p>
+                        </>
+                      ) : isAutoCallActive ? (
                         <>
                           <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
                             <PhoneCall className="w-8 h-8 text-green-600" />
